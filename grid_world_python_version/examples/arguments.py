@@ -47,7 +47,10 @@ parser.add_argument("--max-steps", type=int, default=1000)
 # ==================== End of Advanced settings ====================
 
 
-args = parser.parse_args()     
+# 使用 parse_known_args 是为了允许其他脚本添加自己的命令行参数。
+# 例如 examples/main.py 会添加 --verbose、--no-render 等算法参数；
+# GridWorld 只读取这里认识的环境参数，未知参数交给调用脚本继续处理。
+args, _ = parser.parse_known_args()     
 def validate_environment_parameters(env_size, start_state, target_state, forbidden_states):
     """检查网格大小、起点、终点和禁区是否在合法范围内。"""
     if not (isinstance(env_size, tuple) or isinstance(env_size, list) or isinstance(env_size, np.ndarray)) and len(env_size) != 2:
